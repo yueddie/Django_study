@@ -29,6 +29,6 @@ def index(request):
     # ret = models.User.objects.get(user_name='alex', pass_word='456')  # 获取单条数据，如果没有或者返回多条数据则会报错
     # print(ret)
     ret = models.User.objects.filter(user_name='peiqi')  # 获取满足条件的多条数据，没有数据返回空列表
-    print(ret.values())
+    # print(ret.values())
     return render(request, 'index.html')
 

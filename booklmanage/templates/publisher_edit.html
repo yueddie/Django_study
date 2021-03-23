@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<h1>新增页面</h1>
+<form action="" method="post">
+    出版社名称:<input type="text" name="pub_name" value="{{ edit_object.0 }}">
+    <button type="submit">新增</button>
+</form>
+
+<span style="color: red">
+    {% if info is not None %}
+        {{ info }}
+    {% endif %}
+</span>
+</body>
+</html>

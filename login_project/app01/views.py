@@ -18,7 +18,6 @@ def login(request):
             return render(request, 'login.html')
 
 
-
 def index(request):
     # orm 测试
     from app01 import models
@@ -31,4 +30,3 @@ def index(request):
     ret = models.User.objects.filter(user_name='peiqi')  # 获取满足条件的多条数据，没有数据返回空列表
     # print(ret.values())
     return render(request, 'index.html')
-

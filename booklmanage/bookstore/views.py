@@ -1,5 +1,5 @@
 import pymysql
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, HttpResponse
 from bookstore import models
 
 
@@ -26,17 +26,12 @@ def add_publisher(request):
             info = '出版社名字不能为空'
             return render(request, 'publisher_add.html', {'info': info})
         if models.Publisher.objects.filter(name=pub_name):
-            print('aa')
             return render(request, 'publisher_add.html', {'info': '当前出版社已经存在'})
         # print(pub_name)
         models.Publisher.objects.create(name=pub_name)
         info = '新增成功'
 
     return render(request, 'publisher_add.html', {'info': info})
-
-
-def add(request):
-    return redirect('publisher_add.html')
 
 
 def del_publisher(request):
@@ -74,8 +69,7 @@ def edit_publisher(request):
         cursor.execute(sql, [pk, ])  # 执行sql语句
         ret = cursor.fetchone()  # 只取执行后的一条数据，fetchall()则是取多条数据
         cursor.close()  # 关闭游标连接
-        conn.close()    # 关闭数据连接
-        print(ret)
+        conn.close()  # 关闭数据连接
         return render(request, 'publisher_edit.html', {'edit_object': ret})  # 返回结果
     else:  # post 请求
         conn = pymysql.connect(host='127.0.0.1', port=3306, user='root', password='1234', db='publisher',
@@ -88,3 +82,33 @@ def edit_publisher(request):
         cursor.close()
         conn.close()
         return redirect('/publisher')
+
+
+# def book_list(request):
+#     all_book = models.Book.objects.all()  # 查询book表中的所有数据
+#     print(all_book)
+#     for books in all_book:
+#         print(books)
+#         print(books.name)  # 获取表中的name属性
+#         print(books.pk)  # 获取主键信息
+#         print(books.publisher)  # 获取外键关联的出版社对象，可以直接操作该对象获取属性books.publisher.name
+#         print(books.publisher_id)  # 获取外键id，也可以用books.publisher.id获得不过会更麻烦，会多查询一次
+#
+#     return HttpResponse('book')
+
+def book_list(request):
+    conn = pymysql.connect(host='127.0.0.1', port=3306, user='root', password='1234', db='publisher',
+                           charset='utf8')  # 通过pymysql连接mysql数据
+    cursor = conn.cursor()  # 创建游标
+    sql = 'select bookstore_book.id,bookstore_book.name,bp.name from bookstore_book left join ' \
+          'bookstore_publisher bp on bp.id = bookstore_book.publisher_id;'  # 左连接查询书名和对应的出版社名称
+    s = cursor.execute(sql)  # 查询到的结果数量
+    all_book = cursor.fetchall()  # 获取所有数据，返回类型是元组，fetchone获取一条数据，
+    cursor.close()
+    conn.close()  # 关闭连接
+    print(all_book)
+    print(s)
+    for book in all_book:
+        print(type(book))
+        print(book)
+    return HttpResponse('book')

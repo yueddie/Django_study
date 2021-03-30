@@ -23,4 +23,5 @@ urlpatterns = [
     path('add_publisher/', views.add_publisher),
     path('del_publisher/', views.del_publisher),
     path('edit_publisher/', views.edit_publisher),
+    path('book_list/', views.book_list),
 ]

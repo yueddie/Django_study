@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<table border="1">
+    <thead>
+    <tr>
+        <th>序号</th>
+        <th>id</th>
+        <th>书名</th>
+        <th>出版社名称</th>
+        <th>操作</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for book in all_book %}
+        <tr>
+            <td>{{ forloop.counter }}</td>
+            <td>{{ book.id }}</td>
+            <td>{{ book.name }}</td>
+            <td>{{ book.publisher.name }}</td> {# 该段是django orm关系映射返回的对象解析 #}
+            <td>
+                <a href="/book_del/?id={{ book.id }}">删除</a>
+                <a href="/book_edit/?id={{ book.id }}">编辑</a>
+            </td>
+            {#                <td>{{ forloop.counter }}</td>#}
+            {#                <td>{{ book.0}}</td>#}
+            {#                <td>{{ book.1}}</td>#}
+            {#                <td>{{ book.2}}</td>#}
+            {#            该断用于pymysql方式连接数据库返回的数据#}
+        </tr>
+    {% endfor %}
+
+    </tbody>
+</table>
+<p>
+    <a href="/book_add">新增</a>
+</p>
+</body>
+</html>

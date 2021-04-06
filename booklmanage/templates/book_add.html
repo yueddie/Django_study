@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>add</title>
+</head>
+<body>
+<form action="" method="post">
+    <p>
+        书名:
+        <label>
+            <input type="text" name="book_name"/> <span style="color: red">{{ errors }}</span>
+        </label>
+    </p>
+    <p>
+        出版社名称:
+        <label for=""><select name="publisher" id="">
+            {# pymysql方式展示数据 #}
+            {% for publisher in all_publishers %}
+                <option value="{{ publisher.0 }}">{{ publisher.1 }}</option>
+            {% endfor %}
+
+            {#            {% for publisher in all_publishers %}#}
+            {#                <option value="{{ publisher.id }}">{{ publisher.name }}</option>#}
+            {#            {% endfor %}#}{# django ORM关系映射对象方式展示数据 #}
+        </select>
+        </label>
+    </p>
+    <p><input type="submit" value="提交"></p>
+</form>
+</body>
+</html>

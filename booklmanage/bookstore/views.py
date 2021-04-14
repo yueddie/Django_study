@@ -19,7 +19,7 @@ def publisher(request):
 
 
 def add_publisher(request):
-    info = None
+    info = ''
     if request.method == 'POST':
         pub_name = request.POST.get('pub_name')
         if not pub_name:

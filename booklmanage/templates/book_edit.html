@@ -2,29 +2,121 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>book_eidt</title>
+    <title>Title</title>
+    <link rel="stylesheet" href="/static/pligins/bootstrap-3.3.7-dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/static/css/dashboard.css">
 </head>
 <body>
-<form action="" method="post">
-    <label>
-        书名: <input type="text" value="{{ book_obj.name }}" name="book_name">
-    </label>
-     <p>
-        出版社名称:
-        <label for=""><select name="publisher_id" id="" >
-            {% for publisher in publisher_obj %}
-                {% if publisher.id == book_obj.publisher.id %}
-                    <option selected value="{{ publisher.id }}">{{publisher.name }}</option>
-                {% else %}
-                     <option value="{{ publisher.id }}">{{publisher.name }}</option>
-                {% endif %}
-            {% endfor %}
-        </select>
-        </label>
-    </p>
-    <p>
-        <input type="submit" value="提交">
-    </p>
-</form>
+
+<nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar"
+                    aria-expanded="false" aria-controls="navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="#">图书管理系统</a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+            <ul class="nav navbar-nav navbar-right">
+                <li><a href="#">Dashboard</a></li>
+                <li><a href="#">Settings</a></li>
+                <li><a href="#">Profile</a></li>
+                <li><a href="#">Help</a></li>
+            </ul>
+            <form class="navbar-form navbar-right">
+                <label>
+                    <input type="text" class="form-control" placeholder="Search...">
+                </label>
+            </form>
+        </div>
+    </div>
+</nav>
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-3 col-md-2 sidebar">
+            <ul class="nav nav-sidebar">
+                <li><a href="/publisher/">出版社 <span class="sr-only">(current)</span></a></li>
+                <li class="active"><a href="/book_list/">书籍</a></li>
+            </ul>
+        </div>
+        <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+            <div class="panel panel-primary">
+                <div class="panel-heading">新增书籍</div>
+                <div class="panel-body">
+                    <form class="form-horizontal" method="post">
+                        <div class="form-group {% if errors %}has-error{% endif %} ">
+                            <label for="book" class="col-sm-2 control-label">书籍名称</label>
+                            <div class="col-sm-8">
+                                <input id="book" type="text" class="form-control" placeholder="{{ book_obj.name }}"
+                                       name="book_name">
+                                <span class="help-block">{{ errors }}</span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="publisher" class="col-sm-2 control-label">出版社</label>
+                            <div class="col-sm-8">
+                                <select name="publisher" id="publisher" class="form-control">
+                                    {#                                    {% for publisher in all_publishers %}#}
+                                    {#                                        <option value="{{ publisher.0 }}">{{ publisher.1 }}</option>#}
+                                    {#                                    {% endfor %}#}
+                                    {% for publisher in publisher_obj %}
+                                        {% if book_obj.publisher.id == publisher.id %}
+                                            <option selected value="{{ publisher.id }}">{{ publisher.name }}</option>
+                                        {% else %}
+                                            <option value="{{ publisher.id }}">{{ publisher.name }}</option>
+                                        {% endif %}
+                                    {% endfor %}{# django ORM关系映射对象方式展示数据 #}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-offset-2 col-sm-10">
+                                <button type="submit" class="btn btn-default">新增</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 </body>
 </html>
+
+
+{#<!DOCTYPE html>#}
+{#<html lang="en">#}
+{#<head>#}
+{#    <meta charset="UTF-8">#}
+{#    <title>book_eidt</title>#}
+{#</head>#}
+{#<body>#}
+{#<form action="" method="post">#}
+{#    <label>#}
+{#        书名: <input type="text" value="{{ book_obj.name }}" name="book_name">#}
+{#    </label>#}
+{#     <p>#}
+{#        出版社名称:#}
+{#        <label for=""><select name="publisher_id" id="" >#}
+{#            {% for publisher in publisher_obj %}#}
+{#                {% if publisher.id == book_obj.publisher.id %}#}
+{#                    <option selected value="{{ publisher.id }}">{{publisher.name }}</option>#}
+{#                {% else %}#}
+{#                     <option value="{{ publisher.id }}">{{publisher.name }}</option>#}
+{#                {% endif %}#}
+{#            {% endfor %}#}
+{#        </select>#}
+{#        </label>#}
+{#    </p>#}
+{#    <p>#}
+{#        <input type="submit" value="提交">#}
+{#    </p>#}
+{#</form>#}
+{#</body>#}
+{#</html>#}

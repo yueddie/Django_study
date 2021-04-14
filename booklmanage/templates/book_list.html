@@ -3,41 +3,87 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <link rel="stylesheet" href="/static/pligins/bootstrap-3.3.7-dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/static/css/dashboard.css">
 </head>
 <body>
-<table border="1">
-    <thead>
-    <tr>
-        <th>序号</th>
-        <th>id</th>
-        <th>书名</th>
-        <th>出版社名称</th>
-        <th>操作</th>
-    </tr>
-    </thead>
-    <tbody>
-    {% for book in all_book %}
-        <tr>
-            <td>{{ forloop.counter }}</td>
-            <td>{{ book.id }}</td>
-            <td>{{ book.name }}</td>
-            <td>{{ book.publisher.name }}</td> {# 该段是django orm关系映射返回的对象解析 #}
-            <td>
-                <a href="/book_del/?id={{ book.id }}">删除</a>
-                <a href="/book_edit/?id={{ book.id }}">编辑</a>
-            </td>
-            {#                <td>{{ forloop.counter }}</td>#}
-            {#                <td>{{ book.0}}</td>#}
-            {#                <td>{{ book.1}}</td>#}
-            {#                <td>{{ book.2}}</td>#}
-            {#            该断用于pymysql方式连接数据库返回的数据#}
-        </tr>
-    {% endfor %}
 
-    </tbody>
-</table>
-<p>
-    <a href="/book_add">新增</a>
-</p>
+<nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar"
+                    aria-expanded="false" aria-controls="navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="#">图书管理系统</a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+            <ul class="nav navbar-nav navbar-right">
+                <li><a href="#">Dashboard</a></li>
+                <li><a href="#">Settings</a></li>
+                <li><a href="#">Profile</a></li>
+                <li><a href="#">Help</a></li>
+            </ul>
+            <form class="navbar-form navbar-right">
+                <label>
+                    <input type="text" class="form-control" placeholder="Search...">
+                </label>
+            </form>
+        </div>
+    </div>
+</nav>
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-3 col-md-2 sidebar">
+            <ul class="nav nav-sidebar">
+                <li><a href="/publisher/">出版社 <span class="sr-only">(current)</span></a></li>
+                <li class="active"><a href="/book_list/">书籍</a></li>
+            </ul>
+        </div>
+        <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+
+            <h2 class="sub-header">书籍列表</h2>
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th>序号</th>
+                        <th>id</th>
+                        <th>书名</th>
+                        <th>出版社名称</th>
+                        <th>操作</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for book in all_book %}
+                        <tr>
+                            <td>{{ forloop.counter }}</td>
+                            <td>{{ book.id }}</td>
+                            <td>{{ book.name }}</td>
+                            <td>{{ book.publisher.name }}</td>
+
+                            <td>
+                                <a class="btn-danger btn-sm" href="/book_del/?id={{ book.id }}">删除</a>
+                                <a class="btn-primary btn-sm" href="/book_edit/?id={{ book.id }}">编辑</a>
+                            </td>
+{#                            <td>{{ forloop.counter }}</td>#}
+{#                            <td>{{ book.0 }}</td>#}
+{#                            <td>{{ book.1 }}</td>#}
+{#                            <td>{{ book.2 }}</td>#}
+                             {# 该段是django orm关系映射返回的对象解析，该断用于pymysql方式连接数据库返回的数据#}
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+                <button><a href="/book_add/" style="text-decoration:none;color: black">新增</a></button>
+            </div>
+        </div>
+    </div>
+</div>
+
 </body>
 </html>

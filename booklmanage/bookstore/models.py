@@ -23,3 +23,8 @@ class Book(models.Model):
         on_delete=models.SET_DEFAULT, # 删除关联数据,与之关联的值设置为默认值（前提FK字段需要设置默认值,一对一同理）
         on_delete=models.SET, # 删除关联数据,
     """
+
+
+class Author(models.Model):
+    name = models.CharField(max_length=32)
+    books = models.ManyToManyField('Book')

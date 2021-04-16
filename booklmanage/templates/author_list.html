@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<table border="1">
+    <thead>
+    <tr>
+        <th>序号</th>
+        <th>id</th>
+        <th>姓名</th>
+        <th>作品</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for autohr in all_author %}
+        <tr>
+            <td>{{ forloop.counter }}</td>
+            <td>{{ autohr.id }}</td>
+            <td>{{ autohr.name }}</td>
+            <td>
+                {% for book in autohr.books.all %}
+                    {{ book.name }},
+                {% endfor %}
+            </td>
+        </tr>
+    {% endfor %}
+
+    </tbody>
+</table>
+</body>
+</html>

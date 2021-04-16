@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<form action="" method="post">
+    <p>
+        作者姓名: <input type="text" name="author_name">
+    </p>
+    <p>
+        代表作:
+        <select name="book_id" id="" multiple>
+            {% for book in all_books %}
+                <option value="{{ book.id }}">{{ book.name }}</option>
+            {% endfor %}
+        </select>
+    </p>
+    <input type="submit" value="提交">
+</form>
+</body>
+</html>

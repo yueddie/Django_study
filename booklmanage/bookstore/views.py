@@ -186,3 +186,47 @@ def book_edit(request):
         models.Book.objects.filter(pk=pk).update(name=book_name, publisher_id=publisher_id)
         return redirect('/book_list/')
     return render(request, 'book_edit.html', {'book_obj': book_obj, 'publisher_obj': publisher_obj})
+
+
+def author_list(request):
+    """
+    展示作者
+    :param request:
+    :return:
+    """
+    # 查询所有的作者然后返回一个页面
+    all_author = models.Author.objects.all()
+    # for author in all_author:
+    #     print(author)
+    #     print(author.name)
+    #     print(author.books, type(author.books))  # 是一个关系管理对象，会获取到当前作者关联的所有对象
+    #     print(author.books.all(), type(author.books.all()))  # 关联的所有对象
+    return render(request, 'author_list.html', {'all_author': all_author})
+
+
+def author_add(request):
+    """
+    新增作者
+    :param request:
+    :return:
+    """
+    # get 返回页面包含form表单，让用户输入作者，选择作评
+    all_books = models.Book.objects.all()
+    # post
+    if request.method == 'POST':
+        # 获取用户提交数据
+        author_name = request.POST.get('author_name')
+        # book_ids = request.POST.get('book_id') # 如果传入的值有多个只能获取最后一个值
+        book_ids = request.POST.getlist('book_id')  # 获取多个数据
+        # print(request.POST)
+        # print(author_name)
+        # print(book_ids)
+        # 向数据库中插入对象
+        author_obj = models.Author.objects.create(name=author_name)
+        # 将作者绑定书籍对象
+        author_obj.books.set(book_ids)  # 设置多对多关系
+        # 返回展示页面
+        return redirect('/author_list/')
+        pass
+
+    return render(request, 'author_add.html', {'all_books': all_books})

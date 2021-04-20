@@ -12,18 +12,23 @@
         <th>id</th>
         <th>姓名</th>
         <th>作品</th>
+        <th>操作</th>
     </tr>
     </thead>
     <tbody>
-    {% for autohr in all_author %}
+    {% for author in all_author %}
         <tr>
             <td>{{ forloop.counter }}</td>
-            <td>{{ autohr.id }}</td>
-            <td>{{ autohr.name }}</td>
+            <td>{{ author.id }}</td>
+            <td>{{ author.name }}</td>
             <td>
-                {% for book in autohr.books.all %}
+                {% for book in author.books.all %}
                     {{ book.name }},
                 {% endfor %}
+            </td>
+            <td>
+                <a href="/author_del/?pk={{ author.id }}">删除</a>
+                <a href="/author_edit/?pk={{ author.id }}">编辑</a>
             </td>
         </tr>
     {% endfor %}

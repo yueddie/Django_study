@@ -1,5 +1,5 @@
 import pymysql
-from django.shortcuts import render, redirect, HttpResponse
+from django.shortcuts import render, redirect
 from bookstore import models
 
 
@@ -230,3 +230,26 @@ def author_add(request):
         pass
 
     return render(request, 'author_add.html', {'all_books': all_books})
+
+
+# 删除作者
+def author_del(request):
+    pk = request.GET.get('pk')  # 通过前端获取需要删除的id
+    models.Author.objects.filter(pk=pk).delete()  # 查询到对象进行删除
+    # 也会删除与书籍相关的对应关系,并没有删除书籍
+    return redirect('/author_list/')
+
+
+# 编辑作者
+def author_edit(request):
+    pk = request.GET.get('pk')  # 获取get请求中的id
+    author_obj = models.Author.objects.get(pk=pk)  # 获取所有的书籍用于修改
+    if request.method == 'POST':
+        name = request.POST.get('author_name')  # 获取post中修改的作者名字
+        book_ids = request.POST.getlist('book_id')  # 获取修改的后书籍id
+        author_obj.name = name  # 修改作者名字
+        author_obj.save()  # 将修改保存到数据库
+        author_obj.books.set(book_ids)  # 设置作者与书籍的对应关系
+        return redirect('/author_list/')  # 重定向到到作者列表界面
+    book_objs = models.Book.objects.all()  # 查询出所有书籍方便编辑界面
+    return render(request, 'author_edit.html', {'author_obj': author_obj, 'book_objs': book_objs})  # 返回修改界面

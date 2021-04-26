@@ -1,39 +1,43 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-<table border="1">
-    <thead>
-    <tr>
-        <th>序号</th>
-        <th>id</th>
-        <th>姓名</th>
-        <th>作品</th>
-        <th>操作</th>
-    </tr>
-    </thead>
-    <tbody>
-    {% for author in all_author %}
-        <tr>
-            <td>{{ forloop.counter }}</td>
-            <td>{{ author.id }}</td>
-            <td>{{ author.name }}</td>
-            <td>
-                {% for book in author.books.all %}
-                    {{ book.name }},
-                {% endfor %}
-            </td>
-            <td>
-                <a href="/author_del/?pk={{ author.id }}">删除</a>
-                <a href="/author_edit/?pk={{ author.id }}">编辑</a>
-            </td>
-        </tr>
-    {% endfor %}
+{% extends 'publisher_list.html' %}
+{% block book_active %}
 
-    </tbody>
-</table>
-</body>
-</html>
+{% endblock %}
+{% block pub_active %}
+
+{% endblock %}
+{% block author_active %}
+    active
+{% endblock %}
+{% block main %}
+    <h2>作者列表</h2>
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>序号</th>
+            <th>id</th>
+            <th>姓名</th>
+            <th>作品</th>
+            <th>操作</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for author in all_author %}
+            <tr>
+                <td>{{ forloop.counter }}</td>
+                <td>{{ author.id }}</td>
+                <td>{{ author.name }}</td>
+                <td>
+                    {% for book in author.books.all %}
+                        {{ book.name }},
+                    {% endfor %}
+                </td>
+                <td>
+                    <a href="/author_del/?pk={{ author.id }}">删除</a>
+                    <a href="/author_edit/?pk={{ author.id }}">编辑</a>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    <button><a href="/author_add/" style="text-decoration:none;color: black">新增</a></button>
+{% endblock %}

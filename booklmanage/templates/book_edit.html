@@ -1,51 +1,13 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-    <link rel="stylesheet" href="/static/pligins/bootstrap-3.3.7-dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href="/static/css/dashboard.css">
-</head>
-<body>
-
-<nav class="navbar navbar-inverse navbar-fixed-top">
-    <div class="container-fluid">
-        <div class="navbar-header">
-            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar"
-                    aria-expanded="false" aria-controls="navbar">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-            <a class="navbar-brand" href="#">图书管理系统</a>
-        </div>
-        <div id="navbar" class="navbar-collapse collapse">
-            <ul class="nav navbar-nav navbar-right">
-                <li><a href="#">Dashboard</a></li>
-                <li><a href="#">Settings</a></li>
-                <li><a href="#">Profile</a></li>
-                <li><a href="#">Help</a></li>
-            </ul>
-            <form class="navbar-form navbar-right">
-                <label>
-                    <input type="text" class="form-control" placeholder="Search...">
-                </label>
-            </form>
-        </div>
-    </div>
-</nav>
-
-<div class="container-fluid">
-    <div class="row">
-        <div class="col-sm-3 col-md-2 sidebar">
-            <ul class="nav nav-sidebar">
-                <li><a href="/publisher/">出版社 <span class="sr-only">(current)</span></a></li>
-                <li class="active"><a href="/book_list/">书籍</a></li>
-            </ul>
-        </div>
-        <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
-            <div class="panel panel-primary">
+{% extends 'publisher_list.html' %}
+{% block book_active %}
+    active
+{% endblock %}
+{% block pub_active %}
+{% endblock %}
+{% block author_active %}
+{% endblock %}
+{% block main %}
+<div class="panel panel-primary">
                 <div class="panel-heading">新增书籍</div>
                 <div class="panel-body">
                     <form class="form-horizontal" method="post">
@@ -82,12 +44,10 @@
                     </form>
                 </div>
             </div>
-        </div>
-    </div>
-</div>
+{% endblock %}
 
-</body>
-</html>
+
+
 
 
 {#<!DOCTYPE html>#}

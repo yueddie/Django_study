@@ -10,7 +10,7 @@ class Publisher(models.Model):
 
 class Book(models.Model):
     name = models.CharField(max_length=32)
-    publisher = models.ForeignKey(to='Publisher', on_delete=models.CASCADE)
+    publisher = models.ForeignKey(to='Publisher', on_delete=models.CASCADE)  # 外键
     """
         on_delete其他参数
         on_delete=None, # 删除关联表中的数据时,当前表与其关联的field的行为
@@ -27,4 +27,4 @@ class Book(models.Model):
 
 class Author(models.Model):
     name = models.CharField(max_length=32)
-    books = models.ManyToManyField('Book')
+    books = models.ManyToManyField('Book')  # 建立和书籍的多对多关系

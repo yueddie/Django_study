@@ -1,9 +1,25 @@
 import pymysql
 from django.shortcuts import render, redirect
 from bookstore import models
-
+from django.views import View
+from django.utils.decorators import method_decorator
 
 # Create your views here.
+import time
+
+
+# 统计时间的装饰器
+def timer(func):
+    def inner(request, *args, **kwargs):
+        start = time.time()
+        ret = func(request, *args, **kwargs)
+        print("执行时间{}".format(time.time() - start))
+        return ret
+
+    return inner
+
+
+@timer
 def publisher(request):
     """
     展示数据
@@ -18,20 +34,49 @@ def publisher(request):
     # context将信息替换到html模板进行渲染，是字典类型，key是前端识别的值,values是需要用到的后台信息
 
 
-def add_publisher(request):
-    info = ''
-    if request.method == 'POST':
-        pub_name = request.POST.get('pub_name')
-        if not pub_name:
+# FBV添加出版社
+# def add_publisher(request):
+#     info = ''
+#     if request.method == 'POST':
+#         pub_name = request.POST.get('pub_name')
+#         if not pub_name:
+#             info = '出版社名字不能为空'
+#             return render(request, 'publisher_add.html', {'info': info})
+#         if models.Publisher.objects.filter(name=pub_name):
+#             return render(request, 'publisher_add.html', {'info': '当前出版社已经存在'})
+#         # print(pub_name)
+#         models.Publisher.objects.create(name=pub_name)
+#         info = '新增成功'
+#
+#     return render(request, 'publisher_add.html', {'info': info})
+
+
+# CBV 添加出版社
+
+@method_decorator(timer, name='dispatch')
+class AddPublisher(View):
+
+    @method_decorator(timer)  # 让get和post都实现装饰器，应为post get执行之前都会执行该函数
+    def dispatch(self, request, *args, **kwargs):
+        ret = super().dispatch(request, *args, **kwargs)
+        return ret
+
+    def get(self, request):
+        print('get')
+        return render(request, 'publisher_add.html')
+
+    def post(self, request):
+        print('post')
+        pub_names = request.POST.get('pub_name')
+        if not pub_names:
             info = '出版社名字不能为空'
             return render(request, 'publisher_add.html', {'info': info})
-        if models.Publisher.objects.filter(name=pub_name):
+        if models.Publisher.objects.filter(name=pub_names):
             return render(request, 'publisher_add.html', {'info': '当前出版社已经存在'})
         # print(pub_name)
-        models.Publisher.objects.create(name=pub_name)
+        models.Publisher.objects.create(name=pub_names)
         info = '新增成功'
-
-    return render(request, 'publisher_add.html', {'info': info})
+        return render(request, 'publisher_add.html', {'info': info})
 
 
 def del_publisher(request):

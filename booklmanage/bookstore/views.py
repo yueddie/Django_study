@@ -1,5 +1,7 @@
+import json
+
 import pymysql
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, HttpResponse
 from bookstore import models
 from django.views import View
 from django.utils.decorators import method_decorator
@@ -62,7 +64,8 @@ class AddPublisher(View):
         return ret
 
     def get(self, request):
-        print('get')
+        print(request.path_info)
+        print(request.get_full_path())
         return render(request, 'publisher_add.html')
 
     def post(self, request):
@@ -92,41 +95,43 @@ def del_publisher(request):
     return redirect('/publisher/')
 
 
-# def edit_publisher(request):
-#     pk = request.GET.get('pk')  # 获取前台传递get传递过来的pk信息
-#     edit_obj = models.Publisher.objects.get(pk=pk)
-#     if request.method == 'GET':
-#         return render(request, 'publisher_edit.html', {'edit_obj': edit_obj})
-#     else:
-#         edit_name = request.POST.get('pub_name')  # 获取post传递过来的name值
-#         edit_obj.name = edit_name  # 内存中修改要该的名字
-#         print(edit_obj.id)
-#         edit_obj.save()  # 提交到数据库
-#         return redirect('/publisher')
-
-def edit_publisher(request):
-    pk = request.GET.get('pk')  # 获取从页面穿过来要删除的出版社id
-    if request.method == 'GET':  # get请求
-        conn = pymysql.connect(host='127.0.0.1', port=3306, user='root', password='1234', db='publisher',
-                               charset='utf8')  # 通过pymysql连接mysql数据
-        cursor = conn.cursor()  # 创建游标
-        sql = "select name from bookstore_publisher where id = %s"  # sql语句
-        cursor.execute(sql, [pk, ])  # 执行sql语句
-        ret = cursor.fetchone()  # 只取执行后的一条数据，fetchall()则是取多条数据
-        cursor.close()  # 关闭游标连接
-        conn.close()  # 关闭数据连接
-        return render(request, 'publisher_edit.html', {'edit_object': ret})  # 返回结果
-    else:  # post 请求
-        conn = pymysql.connect(host='127.0.0.1', port=3306, user='root', password='1234', db='publisher',
-                               charset='utf8')
-        cursor = conn.cursor()
-        name = request.POST.get('pub_name')
-        sql = "update bookstore_publisher set name=%s where id=%s"
-        cursor.execute(sql, [name, pk, ])
-        conn.commit()
-        cursor.close()
-        conn.close()
+def edit_publisher(request, pk):
+    # pk = request.GET.get('pk')  # 获取前台传递get传递过来的pk信息
+    # pk = id
+    edit_obj = models.Publisher.objects.get(pk=pk)
+    if request.method == 'GET':
+        return render(request, 'publisher_edit.html', {'edit_obj': edit_obj})
+    else:
+        edit_name = request.POST.get('pub_name')  # 获取post传递过来的name值
+        edit_obj.name = edit_name  # 内存中修改要该的名字
+        print(edit_obj.id)
+        edit_obj.save()  # 提交到数据库
         return redirect('/publisher')
+
+
+# def edit_publisher(request):
+#     pk = request.GET.get('pk')  # 获取从页面穿过来要删除的出版社id
+#     if request.method == 'GET':  # get请求
+#         conn = pymysql.connect(host='127.0.0.1', port=3306, user='root', password='1234', db='publisher',
+#                                charset='utf8')  # 通过pymysql连接mysql数据
+#         cursor = conn.cursor()  # 创建游标
+#         sql = "select name from bookstore_publisher where id = %s"  # sql语句
+#         cursor.execute(sql, [pk, ])  # 执行sql语句
+#         ret = cursor.fetchone()  # 只取执行后的一条数据，fetchall()则是取多条数据
+#         cursor.close()  # 关闭游标连接
+#         conn.close()  # 关闭数据连接
+#         return render(request, 'publisher_edit.html', {'edit_object': ret})  # 返回结果
+#     else:  # post 请求
+#         conn = pymysql.connect(host='127.0.0.1', port=3306, user='root', password='1234', db='publisher',
+#                                charset='utf8')
+#         cursor = conn.cursor()
+#         name = request.POST.get('pub_name')
+#         sql = "update bookstore_publisher set name=%s where id=%s"
+#         cursor.execute(sql, [name, pk, ])
+#         conn.commit()
+#         cursor.close()
+#         conn.close()
+#         return redirect('/publisher')
 
 
 def book_list(request):
@@ -298,3 +303,14 @@ def author_edit(request):
         return redirect('/author_list/')  # 重定向到到作者列表界面
     book_objs = models.Book.objects.all()  # 查询出所有书籍方便编辑界面
     return render(request, 'author_edit.html', {'author_obj': author_obj, 'book_objs': book_objs})  # 返回修改界面
+
+
+# json
+from django.http.response import JsonResponse
+
+
+def get_json(request):
+    data = {"k1": "v1"}
+    data2 = ['1', "2"]
+    # return HttpResponse(json.dumps({"k1": "v1"})) # Conten-Type: text/html; charset=utf-8
+    return JsonResponse(data2, safe=False)  # Conten-Type:application/json

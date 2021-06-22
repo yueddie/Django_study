@@ -32,12 +32,12 @@
                     {% endfor %}
                 </td>
                 <td>
-                    <a href="/author_del/?pk={{ author.id }}">删除</a>
-                    <a href="/author_edit/?pk={{ author.id }}">编辑</a>
+                    <a href="{% url "delete" "author" author.id %}">删除</a>
+                    <a href="{% url "edit_author" %}?pk={{ author.id }}">编辑</a>
                 </td>
             </tr>
         {% endfor %}
         </tbody>
     </table>
-    <button><a href="/author_add/" style="text-decoration:none;color: black">新增</a></button>
+    <button><a href="{% url "add_author" %}" style="text-decoration:none;color: black">新增</a></button>
 {% endblock %}

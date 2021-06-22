@@ -1,7 +1,7 @@
-import json
+# import json
 
 import pymysql
-from django.shortcuts import render, redirect, HttpResponse
+from django.shortcuts import render, redirect, reverse, HttpResponse
 from bookstore import models
 from django.views import View
 from django.utils.decorators import method_decorator
@@ -21,7 +21,6 @@ def timer(func):
     return inner
 
 
-@timer
 def publisher(request):
     """
     展示数据
@@ -92,7 +91,7 @@ def del_publisher(request):
     pk = request.GET.get('pk')
     # 通过model查询到该id并通过delete方法删除
     models.Publisher.objects.filter(pk=pk).delete()
-    return redirect('/publisher/')
+    return redirect(reverse("publisher"))
 
 
 def edit_publisher(request, pk):
@@ -106,7 +105,7 @@ def edit_publisher(request, pk):
         edit_obj.name = edit_name  # 内存中修改要该的名字
         print(edit_obj.id)
         edit_obj.save()  # 提交到数据库
-        return redirect('/publisher')
+        return redirect(reverse("publisher"))
 
 
 # def edit_publisher(request):
@@ -131,7 +130,7 @@ def edit_publisher(request, pk):
 #         conn.commit()
 #         cursor.close()
 #         conn.close()
-#         return redirect('/publisher')
+#         return redirect(reverse("publisher"))
 
 
 def book_list(request):
@@ -203,7 +202,7 @@ def book_add(request):
             conn.commit()  # 一定要提交不然不会保存到数据库
             cursor.close()
             conn.close()
-            return redirect('/book_list/')  # 重定向到book_list界面
+            return redirect(reverse("book"))  # 重定向到book_list界面
     sql = 'select bookstore_publisher.id,bookstore_publisher.name from bookstore_publisher;'  # 查询得到所有的出版社信息
     cursor.execute(sql)
     all_publishers = cursor.fetchall()
@@ -217,7 +216,7 @@ def book_del(request):
     print(pk)
     del_obj = models.Book.objects.filter(id=pk)  # 通过orm获取删除对象
     del_obj.delete()  # 通过orm对象进行删除
-    return redirect('/book_list/')
+    return redirect(reverse("book"))
 
 
 def book_edit(request):
@@ -234,7 +233,7 @@ def book_edit(request):
         # book_obj.save()
         # 方法2
         models.Book.objects.filter(pk=pk).update(name=book_name, publisher_id=publisher_id)
-        return redirect('/book_list/')
+        return redirect(reverse("book"))
     return render(request, 'book_edit.html', {'book_obj': book_obj, 'publisher_obj': publisher_obj})
 
 
@@ -276,7 +275,7 @@ def author_add(request):
         # 将作者绑定书籍对象
         author_obj.books.set(book_ids)  # 设置多对多关系
         # 返回展示页面
-        return redirect('/author_list/')
+        return redirect(reverse("author"))
         pass
 
     return render(request, 'author_add.html', {'all_books': all_books})
@@ -287,7 +286,7 @@ def author_del(request):
     pk = request.GET.get('pk')  # 通过前端获取需要删除的id
     models.Author.objects.filter(pk=pk).delete()  # 查询到对象进行删除
     # 也会删除与书籍相关的对应关系,并没有删除书籍
-    return redirect('/author_list/')
+    return redirect(reverse("author"))
 
 
 # 编辑作者
@@ -300,7 +299,7 @@ def author_edit(request):
         author_obj.name = name  # 修改作者名字
         author_obj.save()  # 将修改保存到数据库
         author_obj.books.set(book_ids)  # 设置作者与书籍的对应关系
-        return redirect('/author_list/')  # 重定向到到作者列表界面
+        return redirect(reverse("author"))  # 重定向到到作者列表界面
     book_objs = models.Book.objects.all()  # 查询出所有书籍方便编辑界面
     return render(request, 'author_edit.html', {'author_obj': author_obj, 'book_objs': book_objs})  # 返回修改界面
 
@@ -314,3 +313,18 @@ def get_json(request):
     data2 = ['1', "2"]
     # return HttpResponse(json.dumps({"k1": "v1"})) # Conten-Type: text/html; charset=utf-8
     return JsonResponse(data2, safe=False)  # Conten-Type:application/json
+
+
+def delete(request, name, pk):
+    # print(eval(name.capitalize()).objects.filter(pk=pk)) # 导入对象类后，通过evak获取对象然后进行操作
+    cls = getattr(models, name.capitalize())  # 通过反射获取类对象，然后进行删除操作
+    if cls:  # 判断对应的对象是否存在
+        pass
+    else:
+        return HttpResponse("没有该页面对象")
+    ret = cls.objects.filter(pk=pk)
+    if ret:  # 判断对象是否查询到
+        ret.delete()
+    else:
+        return HttpResponse("没有查到需要删除的对象")
+    return redirect(reverse(name))  # 通过命名反向解析跳转到界面

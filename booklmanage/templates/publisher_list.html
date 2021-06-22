@@ -18,10 +18,11 @@
     <div class="row">
         <div class="col-sm-3 col-md-2 sidebar">
             <ul class="nav nav-sidebar">
-                <li class="{% block pub_active %}active{% endblock %}"><a href="/publisher/">出版社 <span class="sr-only">(current)</span></a>
+                <li class="{% block pub_active %}active{% endblock %}"><a href="{% url "publisher" %}">出版社 <span
+                        class="sr-only">(current)</span></a>
                 </li>
-                <li class="{% block book_active %}{% endblock %}"><a href="/book_list/">书籍</a></li>
-                <li class="{% block author_active %}{% endblock %}"><a href="/author_list/">作者</a></li>
+                <li class="{% block book_active %}{% endblock %}"><a href="{% url "book" %}">书籍</a></li>
+                <li class="{% block author_active %}{% endblock %}"><a href="{% url "author" %}">作者</a></li>
 
             </ul>
         </div>
@@ -45,9 +46,9 @@
                                 <td>{{ i.id }}</td>
                                 <td>{{ i.name }}</td>
                                 <td>
-                                    <a class="btn btn-danger btn-sm" href="/del_publisher/?pk={{ i.id }}"
+                                    <a class="btn btn-danger btn-sm" href="{% url "delete"  'publisher'  i.id %}"
                                        style="text-decoration:none;color: black">删除</a>
-                                    <a class="btn btn-primary btn-sm" href="/edit_publisher/{{ i.id }}"
+                                    <a class="btn btn-primary btn-sm" href="{% url "edit_publisher"  i.id %}"
                                        style="text-decoration:none;color: black">修改</a>
                                 </td>
                             </tr>
@@ -58,7 +59,8 @@
                     {% load mytags %}
                     {% pagination 10 %}
                     {#                    <-- 分页结束 --!>#}
-                    <button><a href="/add_publisher" style="text-decoration:none;color: black">新增</a></button>
+                    <button><a href="{% url "add_publisher" %}" style="text-decoration:none;color: black">新增</a>
+                    </button>
                 </div>
             {% endblock %}
         </div>

@@ -28,8 +28,8 @@
                     <td>{{ book.publisher.name }}</td>
 
                     <td>
-                        <a class="btn-danger btn-sm" href="/book_del/?id={{ book.id }}">删除</a>
-                        <a class="btn-primary btn-sm" href="/book_edit/?id={{ book.id }}">编辑</a>
+                        <a class="btn-danger btn-sm" href="{% url "delete" 'book' book.id %}">删除</a>
+                        <a class="btn-primary btn-sm" href="{% url "edit_book" %}?id={{ book.id }}">编辑</a>
                     </td>
                     {#                            <td>{{ forloop.counter }}</td>#}
                     {#                            <td>{{ book.0 }}</td>#}
@@ -40,6 +40,6 @@
             {% endfor %}
             </tbody>
         </table>
-        <button><a href="/book_add/" style="text-decoration:none;color: black">新增</a></button>
+        <button><a href="{% url "add_book" %}" style="text-decoration:none;color: black">新增</a></button>
     </div>
 {% endblock %}
